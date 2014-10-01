@@ -3,8 +3,6 @@
  
 #include "defs.h"
 
-#define THREADCOUNT 4 
-
 VOID ErrorExit(LPSTR); 
 
 IMPLICIT_API extern BOOL WINAPI StoreData(DWORD dw);
@@ -17,8 +15,10 @@ void process_dyn_dll(void)
 	HMODULE hMod = LoadLibrary("explicit_dll");
 
 	explicit_dll_do_my_stuff do_stuff = GetProcAddress(hMod, "explicit_dll_do_my_stuff");
+	explicit_dll_do_my_stuff do_stuff_other_file = GetProcAddress(hMod, "explicit_dll_other_file_ts_var");
 
 	do_stuff();
+	do_stuff_other_file();
 }
 
 DWORD WINAPI ThreadFunc(VOID) 
@@ -28,8 +28,7 @@ DWORD WINAPI ThreadFunc(VOID)
    if(!StoreData(GetCurrentThreadId()))
       ErrorExit("StoreData error");
 
-   //for(i=0; i<THREADCOUNT; i++)
-   for(i=0; i<1; i++)
+   for(i=0; i<THREADCOUNT; i++)
    {
       DWORD dwOut;
       if(!GetData(&dwOut))

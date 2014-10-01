@@ -30,3 +30,5 @@
 #endif
 
 
+#define THREADCOUNT 4 
+
