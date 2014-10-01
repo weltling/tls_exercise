@@ -1,6 +1,19 @@
-tls_research
-============
+# tls_research #
+
 
 Research on crossplatform thread local storage solutions
 
-On windows, both bin.exe and explicit_dll depend on the implicit_dll. implicit_dll manages the TLS storage. explicit_dll is loaded per LoadLibrary indo the bin.exe.
+## Windows ##
+
+- **implicit_dll**
+	allocates tread storage, manages thread data 
+- **explicit_dll**
+	links against implicit_dll, uses it to store and retrieve thread specific data
+- **bin.exe**
+	links against implicit_dll, loads explicit_dll per LoadLibrary
+
+Additionally, explicit_dll uses a DLL wide variable declared with __declspec(thread). That variable is defined in one file and used as extern in another one.
+
+## Linux ##
+
+TODO
