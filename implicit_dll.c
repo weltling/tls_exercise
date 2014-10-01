@@ -2,6 +2,8 @@
 
 #include <windows.h>
 
+#include "defs.h"
+
 static DWORD dwTlsIndex; // address of shared memory
  
 // DllMain() is the entry-point function for this DLL. 
@@ -84,8 +86,8 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, // DLL module handle
 extern "C" {          // we need to export the C interface
 #endif
 
-__declspec(dllexport)
-BOOL WINAPI StoreData(DWORD dw)
+
+IMPLICIT_API BOOL WINAPI StoreData(DWORD dw)
 {
    LPVOID lpvData; 
    DWORD * pData;  // The stored memory pointer 
@@ -108,8 +110,7 @@ BOOL WINAPI StoreData(DWORD dw)
    return TRUE;
 }
 
-__declspec(dllexport)
-BOOL WINAPI GetData(DWORD *pdw)
+IMPLICIT_API BOOL WINAPI GetData(DWORD *pdw)
 {
    LPVOID lpvData; 
    DWORD * pData;  // The stored memory pointer 

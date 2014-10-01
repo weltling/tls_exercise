@@ -1,29 +1,31 @@
 #include <windows.h> 
 #include <stdio.h> 
  
+#include "defs.h"
+
 #define THREADCOUNT 4 
 
 VOID ErrorExit(LPSTR); 
 
-__declspec(dllimport) extern BOOL WINAPI StoreData(DWORD dw);
-__declspec(dllimport) extern BOOL WINAPI GetData(DWORD *pdw);
+IMPLICIT_API extern BOOL WINAPI StoreData(DWORD dw);
+IMPLICIT_API extern BOOL WINAPI GetData(DWORD *pdw);
  
-__declspec(dllexport) void dyndll_do_my_stuff(VOID) 
+EXPLICIT_API void explicit_dll_do_my_stuff(VOID) 
 {   
    int i;
 
    if(!StoreData(GetCurrentThreadId()))
-      ErrorExit("dyndll StoreData error");
+      ErrorExit("explicit_dll StoreData error");
 
    //for(i=0; i<THREADCOUNT; i++)
    for(i=0; i<1; i++)
    {
       DWORD dwOut;
       if(!GetData(&dwOut))
-         ErrorExit("dyndll GetData error");
+         ErrorExit("explicit_dll GetData error");
       if( dwOut != GetCurrentThreadId())
-         printf("dyndll thread %d: data is incorrect (%d)\n", GetCurrentThreadId(), dwOut);
-      else printf("dyndll thread %d: data is correct\n", GetCurrentThreadId());
+         printf("explicit_dll thread %d: data is incorrect (%d)\n", GetCurrentThreadId(), dwOut);
+      else printf("explicit_dll thread %d: data is correct\n", GetCurrentThreadId());
       Sleep(0);
    }
    return 0; 
@@ -31,7 +33,7 @@ __declspec(dllexport) void dyndll_do_my_stuff(VOID)
  
 VOID ErrorExit (LPSTR lpszMessage) 
 { 
-   fprintf(stderr, "dyndll %s\n", lpszMessage); 
+   fprintf(stderr, "explicit_dll %s\n", lpszMessage); 
    ExitProcess(0); 
 }
 

@@ -1,24 +1,22 @@
 #include <windows.h> 
 #include <stdio.h> 
  
+#include "defs.h"
+
 #define THREADCOUNT 4 
-#define DLL_NAME TEXT("testdll")
 
 VOID ErrorExit(LPSTR); 
 
-//extern "C" BOOL WINAPI StoreData(DWORD dw);
-//extern "C" BOOL WINAPI GetData(DWORD *pdw);
-__declspec(dllimport) extern BOOL WINAPI StoreData(DWORD dw);
-__declspec(dllimport) extern BOOL WINAPI GetData(DWORD *pdw);
+IMPLICIT_API extern BOOL WINAPI StoreData(DWORD dw);
+IMPLICIT_API extern BOOL WINAPI GetData(DWORD *pdw);
  
-//__declspec(dllexport) void dyndll_do_my_stuff(VOID);
-typedef void (*dyndll_do_my_stuff)(void);
+typedef void (*explicit_dll_do_my_stuff)(void);
 
 void process_dyn_dll(void)
 {
-	HMODULE hMod = LoadLibrary("dyndll.dll");
+	HMODULE hMod = LoadLibrary("explicit_dll");
 
-	dyndll_do_my_stuff do_stuff = GetProcAddress(hMod, "dyndll_do_my_stuff");
+	explicit_dll_do_my_stuff do_stuff = GetProcAddress(hMod, "explicit_dll_do_my_stuff");
 
 	do_stuff();
 }
@@ -55,14 +53,6 @@ int main(VOID)
    int i; 
    HMODULE hm;
  
-// Load the DLL
-
-   hm = LoadLibrary(DLL_NAME);
-   if(!hm)
-   {
-      ErrorExit("DLL failed to load");
-   }
-
 // Create multiple threads. 
  
    for (i = 0; i < THREADCOUNT; i++) 
